@@ -1,340 +1,675 @@
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kala Seduh</title>
-    
-    <!-- Framework & Fonts -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@200;400;800&family=Instrument+Serif:italic@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urban Roast — Modern Coffee Experience</title>
 
-    <style>
-        :root {
-            --accent: #E1FF00;
-            --dark: #050505;
-        }
+  <script src="https://cdn.tailwindcss.com"></script>
 
-        body { 
-            background-color: var(--dark); 
-            color: #efefef;
-            font-family: 'Bricolage Grotesque', sans-serif;
-            overflow-x: hidden;
-            cursor: crosshair;
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-        .font-heading { font-family: 'Bricolage Grotesque', sans-serif; }
-        .font-serif-italic { font-family: 'Instrument Serif', serif; font-style: italic; }
-        .font-mono { font-family: 'Space Mono', monospace; }
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-        /* Noise & Grain */
-        .grain::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.07;
-            pointer-events: none;
-            z-index: 9999;
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urbanBlack: '#0f1111',
+            urbanDark: '#161918',
+            urbanGray: '#232725',
+            urbanGreen: '#5f8b6d',
+            urbanGreenLight: '#7fa38b',
+            urbanCream: '#f5f1ea',
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          boxShadow: {
+            soft: '0 10px 30px rgba(0,0,0,0.15)',
+          }
         }
+      }
+    }
+  </script>
 
-        /* Text Effects */
-        .text-outline {
-            color: transparent;
-            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
-        }
-        
-        .text-glitch:hover {
-            text-shadow: 2px 0 var(--accent), -2px 0 #ff00ff;
-            animation: glitch 0.3s infinite;
-        }
+  <style>
+    body {
+      background: #0f1111;
+      color: white;
+      overflow-x: hidden;
+    }
 
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
-        }
+    .glass {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(10px);
+    }
 
-        /* Marquee Animation */
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-            display: flex;
-            width: 200%;
-            animation: marquee 20s linear infinite;
-        }
+    .hero-gradient {
+      background:
+        radial-gradient(circle at top left, rgba(95,139,109,0.2), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(127,163,139,0.15), transparent 30%);
+    }
 
-        /* Staggered Reveal */
-        .reveal-container { clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
-        .reveal-item { transform: translateY(110%); transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal-item.active { transform: translateY(0); }
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all .7s ease;
+    }
 
-        /* Floating Badge */
-        .floating-badge {
-            animation: float 4s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(-5deg); }
-            50% { transform: translateY(-15px) rotate(5deg); }
-        }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-        /* Custom Selection */
-        ::selection { background: var(--accent); color: black; }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
 
-        /* Brutalist Grid */
-        .brutalist-card {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s ease;
-        }
-        .brutalist-card:hover {
-            border-color: var(--accent);
-            background: rgba(225, 255, 0, 0.03);
-        }
+    ::-webkit-scrollbar-thumb {
+      background: #5f8b6d;
+      border-radius: 999px;
+    }
 
-        @media (max-width: 768px) {
-            .hero-title { font-size: 22vw !important; line-height: 0.8; }
-        }
-    </style>
+    ::-webkit-scrollbar-track {
+      background: #161918;
+    }
+  </style>
 </head>
-<body class="antialiased grain">
 
-    <!-- Preloader/Demo Intro -->
-    <div class="fixed inset-0 z-[200] bg-white text-black flex flex-col justify-center items-center p-10 pointer-events-none" id="preloader" style="transition: transform 1.5s cubic-bezier(0.8, 0, 0.2, 1); transition-delay: 1s;">
-        <div class="font-mono text-[10px] uppercase mb-4 animate-pulse">Initializing Interface...</div>
-        <div class="overflow-hidden">
-            <div class="font-heading text-6xl font-black uppercase tracking-tighter" id="preloader-text">Kala Seduh</div>
-        </div>
+<body class="font-sans">
+
+  <!-- NAVBAR -->
+  <nav class="fixed top-0 left-0 w-full z-50 border-b border-white/10 bg-black/30 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+
+      <div>
+        <h1 class="text-2xl font-extrabold tracking-tight">
+          URBAN<span class="text-urbanGreen">ROAST</span>
+        </h1>
+      </div>
+
+      <div class="hidden md:flex items-center gap-8 text-sm text-gray-300">
+        <a href="#about" class="hover:text-urbanGreen transition">About</a>
+        <a href="#menu" class="hover:text-urbanGreen transition">Menu</a>
+        <a href="#space" class="hover:text-urbanGreen transition">Space</a>
+        <a href="#contact" class="hover:text-urbanGreen transition">Contact</a>
+      </div>
+
+      <a href="#menu"
+        class="bg-urbanGreen hover:bg-urbanGreenLight transition px-5 py-3 rounded-full text-sm font-semibold">
+        Order Coffee
+      </a>
+
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section
+    class="min-h-screen flex items-center relative hero-gradient overflow-hidden">
+
+    <div class="absolute inset-0 opacity-[0.03]">
+      <div class="absolute top-20 left-10 text-[180px] font-black">
+        COFFEE
+      </div>
+      <div class="absolute bottom-0 right-10 text-[180px] font-black">
+        URBAN
+      </div>
     </div>
 
-    <!-- Background Demo Watermark -->
-    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[40vw] font-black opacity-[0.02] select-none pointer-events-none rotate-12 z-0">
-        DEMO
+    <div
+      class="max-w-7xl mx-auto px-6 pt-32 grid lg:grid-cols-2 gap-16 items-center relative z-10">
+
+      <div class="reveal">
+        <span
+          class="bg-urbanGreen/20 border border-urbanGreen/40 text-urbanGreen px-4 py-2 rounded-full text-sm">
+          Modern Coffeehouse Experience
+        </span>
+
+        <h1
+          class="text-5xl md:text-7xl font-extrabold leading-tight mt-8">
+          Crafted Coffee.
+          <br>
+          Urban Atmosphere.
+          <br>
+          <span class="text-urbanGreen">
+            Real Experience.
+          </span>
+        </h1>
+
+        <p
+          class="text-gray-400 text-lg leading-relaxed mt-8 max-w-xl">
+          Urban Roast menghadirkan pengalaman ngopi modern dengan suasana industrial hangat, specialty coffee berkualitas, dan ambience nyaman untuk bekerja maupun bersantai.
+        </p>
+
+        <div class="flex flex-wrap gap-4 mt-10">
+
+          <a href="#menu"
+            class="bg-urbanGreen hover:bg-urbanGreenLight transition px-7 py-4 rounded-full font-semibold">
+            Explore Menu
+          </a>
+
+          <a href="#about"
+            class="border border-white/10 hover:border-urbanGreen transition px-7 py-4 rounded-full font-semibold">
+            Learn More
+          </a>
+
+        </div>
+      </div>
+
+      <!-- HERO IMAGE -->
+      <div class="reveal">
+        <div
+          class="relative rounded-[40px] overflow-hidden border border-white/10 shadow-soft">
+
+          <img
+            src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1400&auto=format&fit=crop"
+            class="w-full h-[650px] object-cover"
+            alt="coffee"
+          >
+
+          <div
+            class="absolute bottom-6 left-6 right-6 glass border border-white/10 rounded-3xl p-6">
+
+            <div class="flex justify-between items-center">
+
+              <div>
+                <p class="text-sm text-gray-400">Signature Blend</p>
+                <h3 class="text-2xl font-bold mt-1">
+                  Urban Latte
+                </h3>
+              </div>
+
+              <div class="text-right">
+                <p class="text-sm text-gray-400">Starting from</p>
+                <h3 class="text-2xl font-bold text-urbanGreen">
+                  Rp 28K
+                </h3>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-32 bg-urbanDark">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+      <div class="grid lg:grid-cols-2 gap-20 items-center">
+
+        <div class="reveal">
+
+          <span
+            class="text-urbanGreen text-sm font-semibold tracking-widest uppercase">
+            About Us
+          </span>
+
+          <h2
+            class="text-4xl md:text-5xl font-extrabold mt-5 leading-tight">
+            More Than
+            <br>
+            Just Coffee
+          </h2>
+
+          <p
+            class="text-gray-400 leading-relaxed mt-8 text-lg">
+            Urban Roast dibangun untuk menghadirkan tempat yang nyaman, modern, dan penuh inspirasi. Kami memadukan specialty coffee, interior industrial modern, dan suasana hangat dalam satu ruang.
+          </p>
+
+          <div class="grid grid-cols-2 gap-6 mt-10">
+
+            <div
+              class="bg-urbanGray rounded-3xl p-6 border border-white/5">
+              <h3 class="text-3xl font-bold text-urbanGreen">
+                100%
+              </h3>
+              <p class="text-gray-400 mt-2">
+                Premium Coffee Beans
+              </p>
+            </div>
+
+            <div
+              class="bg-urbanGray rounded-3xl p-6 border border-white/5">
+              <h3 class="text-3xl font-bold text-urbanGreen">
+                25K+
+              </h3>
+              <p class="text-gray-400 mt-2">
+                Happy Customers
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="reveal">
+
+          <img
+            src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1400&auto=format&fit=crop"
+            class="rounded-[40px] shadow-soft border border-white/10"
+            alt=""
+          >
+
+        </div>
+
+      </div>
+
     </div>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-[100] p-6 md:p-10 flex justify-between items-start mix-blend-difference">
-        <div class="flex flex-col">
-            <span class="font-heading text-4xl font-black tracking-tighter leading-none group cursor-pointer">
-                KALA<span class="text-lime-400 group-hover:text-white transition-colors">SED</span>UH.
-            </span>
-            <div class="flex items-center gap-3 mt-4">
-                <div class="h-[1px] w-12 bg-white opacity-30"></div>
-                <span class="font-mono text-[9px] uppercase tracking-[0.4em] opacity-50 italic">Experimental Prototype</span>
-            </div>
-        </div>
-        <div class="flex flex-col items-end gap-2">
-            <div class="flex gap-1">
-                <span class="w-2 h-2 rounded-full bg-lime-400 animate-ping"></span>
-                <span class="font-mono text-[9px] uppercase tracking-widest font-bold">Live Status: Beta</span>
-            </div>
-            <div class="text-right font-mono text-[8px] uppercase leading-tight tracking-[0.2em] opacity-40">
-                Crafted for<br>Programmergabut.id
-            </div>
-        </div>
-    </nav>
+  </section>
 
-    <!-- Top Left Status -->
-    <div class="fixed left-10 top-1/3 vertical-text font-mono text-[8px] uppercase tracking-[1em] opacity-20 z-50 pointer-events-none hidden lg:block">
-        AUTHENTIC / RAW / BRUTALIST / CONCEPT
+  <!-- MENU -->
+  <section id="menu" class="py-32 bg-urbanBlack">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+      <div class="text-center max-w-2xl mx-auto reveal">
+
+        <span
+          class="text-urbanGreen text-sm font-semibold tracking-widest uppercase">
+          Signature Menu
+        </span>
+
+        <h2
+          class="text-4xl md:text-5xl font-extrabold mt-5">
+          Crafted For
+          Coffee Lovers
+        </h2>
+
+        <p class="text-gray-400 mt-6 leading-relaxed">
+          Pilihan menu favorit dengan racikan modern dan cita rasa khas Urban Roast.
+        </p>
+
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-20">
+
+        <!-- CARD -->
+        <div
+          class="bg-urbanDark rounded-[32px] overflow-hidden border border-white/5 hover:border-urbanGreen transition duration-300 hover:-translate-y-2 reveal">
+
+          <img
+            src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop"
+            class="w-full h-72 object-cover"
+            alt=""
+          >
+
+          <div class="p-8">
+
+            <div class="flex justify-between items-center">
+
+              <h3 class="text-2xl font-bold">
+                Urban Latte
+              </h3>
+
+              <span class="text-urbanGreen font-semibold">
+                Rp 28K
+              </span>
+
+            </div>
+
+            <p class="text-gray-400 mt-4 leading-relaxed">
+              Espresso blend premium dengan creamy milk dan aroma roasted beans yang smooth.
+            </p>
+
+            <button
+              class="w-full mt-8 bg-urbanGreen hover:bg-urbanGreenLight transition py-4 rounded-2xl font-semibold">
+              Add To Cart
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- CARD -->
+        <div
+          class="bg-urbanDark rounded-[32px] overflow-hidden border border-white/5 hover:border-urbanGreen transition duration-300 hover:-translate-y-2 reveal">
+
+          <img
+            src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=1200&auto=format&fit=crop"
+            class="w-full h-72 object-cover"
+            alt=""
+          >
+
+          <div class="p-8">
+
+            <div class="flex justify-between items-center">
+
+              <h3 class="text-2xl font-bold">
+                Matcha Cream
+              </h3>
+
+              <span class="text-urbanGreen font-semibold">
+                Rp 30K
+              </span>
+
+            </div>
+
+            <p class="text-gray-400 mt-4 leading-relaxed">
+              Matcha premium dengan creamy texture yang lembut dan refreshing.
+            </p>
+
+            <button
+              class="w-full mt-8 bg-urbanGreen hover:bg-urbanGreenLight transition py-4 rounded-2xl font-semibold">
+              Add To Cart
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- CARD -->
+        <div
+          class="bg-urbanDark rounded-[32px] overflow-hidden border border-white/5 hover:border-urbanGreen transition duration-300 hover:-translate-y-2 reveal">
+
+          <img
+            src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1200&auto=format&fit=crop"
+            class="w-full h-72 object-cover"
+            alt=""
+          >
+
+          <div class="p-8">
+
+            <div class="flex justify-between items-center">
+
+              <h3 class="text-2xl font-bold">
+                Cold Brew
+              </h3>
+
+              <span class="text-urbanGreen font-semibold">
+                Rp 26K
+              </span>
+
+            </div>
+
+            <p class="text-gray-400 mt-4 leading-relaxed">
+              Slow extraction cold brew dengan karakter bold dan aftertaste clean.
+            </p>
+
+            <button
+              class="w-full mt-8 bg-urbanGreen hover:bg-urbanGreenLight transition py-4 rounded-2xl font-semibold">
+              Add To Cart
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
 
-    <!-- Hero Section -->
-    <section class="min-h-screen flex flex-col justify-center px-6 md:px-20 relative overflow-hidden">
-        <div class="max-w-screen-2xl mx-auto w-full relative z-10 pt-20">
-            
-            <div class="mb-6 reveal-container">
-                <span class="reveal-item block font-mono text-[10px] uppercase tracking-[0.8em] text-lime-400 font-black">STIMULATING SENSES since 2026</span>
-            </div>
-            
-            <h1 class="hero-title font-heading text-[18vw] font-black leading-[0.75] tracking-tighter uppercase relative">
-                <div class="reveal-container overflow-hidden">
-                    <span class="reveal-item block text-glitch">THE FUTURE</span>
-                </div>
-                <div class="reveal-container overflow-hidden">
-                    <span class="reveal-item block text-outline delay-100">IS BITTER</span>
-                </div>
-                <div class="absolute -right-4 top-1/2 floating-badge hidden lg:block">
-                    <div class="bg-lime-400 text-black font-heading font-black p-4 rounded-full text-xs rotate-12 flex flex-col items-center justify-center w-32 h-32 text-center uppercase tracking-tighter">
-                        <span>New<br>Batch</span>
-                        <span class="text-[8px] font-mono mt-1 opacity-60">#902-X</span>
-                    </div>
-                </div>
-            </h1>
+  </section>
 
-            <div class="grid grid-cols-12 gap-6 mt-16">
-                <div class="col-span-12 lg:col-span-4" data-aos="fade-right">
-                    <div class="border-l-4 border-lime-400 pl-6 space-y-4">
-                        <p class="text-sm font-mono opacity-50 uppercase tracking-widest leading-relaxed">
-                            [Manifesto 01] <br>
-                            Kopi adalah artefak budaya. Kami tidak mereduksi rasa. Kami mereduksi distraksi.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-span-12 lg:col-span-5 lg:col-start-8" data-aos="fade-up" data-aos-delay="400">
-                    <p class="text-2xl md:text-4xl font-serif-italic leading-tight tracking-tight opacity-90 mb-10">
-                        Kami adalah antitesis dari kemewahan palsu. Fokus pada esensi, <span class="text-lime-400 underline decoration-1 underline-offset-8">keheningan</span>, dan ekstraksi yang presisi.
-                    </p>
-                    <div class="flex gap-4">
-                        <a href="#menu" class="group relative px-10 py-5 bg-white text-black font-heading font-black uppercase text-xs tracking-widest overflow-hidden block">
-                            <span class="relative z-10 group-hover:text-white transition-colors duration-500">Order Interface</span>
-                            <div class="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
-                        </a>
-                        <button class="px-10 py-5 border border-white/20 font-heading font-black uppercase text-xs tracking-widest hover:border-lime-400 transition-all duration-300">
-                            DOC_2026.PDF
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- SPACE -->
+  <section id="space" class="py-32 bg-urbanDark">
 
-    <!-- Scrolling Text Marquee -->
-    <section class="py-10 overflow-hidden border-y border-white/5 bg-white text-black font-black italic">
-        <div class="animate-marquee whitespace-nowrap text-[15vh] leading-none uppercase font-heading tracking-tighter">
-            <span>UNFILTERED CONCEPT • NO GIMMICKS • COFFEE ARCHIVE • DEMO VERSION •&nbsp;</span>
-            <span>UNFILTERED CONCEPT • NO GIMMICKS • COFFEE ARCHIVE • DEMO VERSION •&nbsp;</span>
-        </div>
-    </section>
+    <div class="max-w-7xl mx-auto px-6">
 
-    <!-- Typographic Grid Showcase -->
-    <section id="menu" class="py-32 px-6 md:px-20 relative">
-        <div class="grid grid-cols-12 gap-px bg-white/10 border border-white/10">
-            
-            <div class="col-span-12 md:col-span-6 lg:col-span-3 p-12 brutalist-card bg-[#0a0a0a]" data-aos="fade-up">
-                <span class="font-mono text-[8px] uppercase tracking-[0.4em] opacity-40">Item 001/BLK</span>
-                <h3 class="text-5xl font-black uppercase mt-6 mb-10 font-heading leading-none">THE<br>VOID</h3>
-                <div class="font-mono text-[10px] space-y-2 opacity-60">
-                    <div>> Single Origin</div>
-                    <div>> 48h Fermentation</div>
-                    <div>> Zero Creamer</div>
-                </div>
-                <div class="mt-20 text-3xl font-serif-italic text-lime-400 tracking-tighter">IDR 45.00</div>
-            </div>
+      <div class="grid lg:grid-cols-2 gap-20 items-center">
 
-            <div class="col-span-12 md:col-span-6 lg:col-span-3 p-12 brutalist-card bg-[#0a0a0a]" data-aos="fade-up" data-aos-delay="100">
-                <span class="font-mono text-[8px] uppercase tracking-[0.4em] opacity-40">Item 002/LTT</span>
-                <h3 class="text-5xl font-black uppercase mt-6 mb-10 font-heading leading-none">GHOST<br>MILK</h3>
-                <div class="font-mono text-[10px] space-y-2 opacity-60">
-                    <div>> Oat Emulsion</div>
-                    <div>> Cold Whisked</div>
-                    <div>> Low Calorie</div>
-                </div>
-                <div class="mt-20 text-3xl font-serif-italic text-lime-400 tracking-tighter">IDR 55.00</div>
-            </div>
+        <div class="reveal">
 
-            <div class="col-span-12 md:col-span-6 lg:col-span-3 p-12 brutalist-card bg-lime-400 text-black" data-aos="fade-up" data-aos-delay="200">
-                <span class="font-mono text-[8px] uppercase tracking-[0.4em] opacity-40">Flash Deal / Limited</span>
-                <h3 class="text-5xl font-black uppercase mt-6 mb-10 font-heading leading-none">PALE<br>MOON</h3>
-                <div class="font-mono text-[10px] space-y-2 font-bold">
-                    <div>> Activated Charcoal</div>
-                    <div>> Salted Honey</div>
-                    <div>> Limited Run</div>
-                </div>
-                <div class="mt-20 text-3xl font-serif-italic tracking-tighter">IDR 38.00</div>
-            </div>
-
-            <div class="col-span-12 md:col-span-6 lg:col-span-3 p-12 brutalist-card bg-[#0a0a0a] flex flex-col justify-between" data-aos="fade-up" data-aos-delay="300">
-                <div class="font-mono text-[8px] uppercase tracking-[0.4em] opacity-40">More coming soon</div>
-                <div class="text-8xl font-black text-outline">???</div>
-                <div class="font-mono text-[10px] underline cursor-pointer hover:text-lime-400">View Full Archive_02</div>
-            </div>
+          <img
+            src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1400&auto=format&fit=crop"
+            class="rounded-[40px] shadow-soft border border-white/10"
+            alt=""
+          >
 
         </div>
-    </section>
 
-    <!-- Experimental Quote Section -->
-    <section class="py-40 px-6 overflow-hidden">
-        <div class="max-w-6xl mx-auto text-center">
-            <div class="font-mono text-[10px] uppercase tracking-[0.8em] opacity-30 mb-20" data-aos="fade-down">Interactive Concept Preview</div>
-            
-            <h2 class="font-heading text-4xl md:text-8xl font-black uppercase leading-[0.85] tracking-tighter" data-aos="fade-up">
-                "KAMI TIDAK <span class="text-outline">MENJUAL</span> KOPI. KAMI MENJUAL <span class="font-serif-italic lowercase text-lime-400">interupsi</span> DI ANTARA KESIBUKANMU."
-            </h2>
-        </div>
-    </section>
+        <div class="reveal">
 
-    <!-- Footer: Industrial Style -->
-    <footer class="p-10 md:p-20 border-t border-white/5 relative">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-20">
-            <div class="lg:col-span-2">
-                <div class="font-heading text-8xl font-black uppercase tracking-tighter mb-10 leading-none">KALA<br>SEDUH.</div>
-                <div class="flex flex-wrap gap-4">
-                    <span class="demo-badge">V.0.42_PREVIEW</span>
-                    <span class="demo-badge">BUILT_IN_JAKARTA</span>
-                    <span class="demo-badge border-white opacity-40 text-white">LATEST_PATCH:APR_2026</span>
-                </div>
-            </div>
-            
-            <div class="space-y-6">
-                <h5 class="font-mono text-[10px] uppercase font-bold tracking-widest text-lime-400">// SOCIAL_LINKS</h5>
-                <ul class="font-heading text-2xl uppercase font-extrabold space-y-2">
-                    <li><a href="#" class="hover:text-outline transition-all">Instagram</a></li>
-                    <li><a href="#" class="hover:text-outline transition-all">Twitter/X</a></li>
-                    <li><a href="#" class="hover:text-outline transition-all">Discord</a></li>
-                </ul>
-            </div>
+          <span
+            class="text-urbanGreen text-sm font-semibold tracking-widest uppercase">
+            Urban Space
+          </span>
 
-            <div class="space-y-6">
-                <h5 class="font-mono text-[10px] uppercase font-bold tracking-widest text-lime-400">// ACCESS_DATA</h5>
-                <p class="font-mono text-[10px] uppercase leading-loose opacity-50">
-                    Senopati Dalam 12 / JAKARTA SELATAN<br>
-                    08.00 — 22.00 / Everyday<br>
-                    No Reservation Required.
+          <h2
+            class="text-4xl md:text-5xl font-extrabold mt-5 leading-tight">
+            Designed For
+            Modern Lifestyle
+          </h2>
+
+          <p
+            class="text-gray-400 mt-8 leading-relaxed text-lg">
+            Interior industrial modern dipadukan dengan pencahayaan hangat dan ambience nyaman untuk bekerja, meeting, maupun menikmati waktu santai.
+          </p>
+
+          <div class="space-y-6 mt-10">
+
+            <div class="flex gap-4">
+              <div
+                class="w-12 h-12 rounded-2xl bg-urbanGreen/20 border border-urbanGreen/20 flex items-center justify-center">
+                ✓
+              </div>
+
+              <div>
+                <h3 class="font-bold text-lg">
+                  Cozy Workspace
+                </h3>
+                <p class="text-gray-400 mt-1">
+                  Area nyaman dengan suasana tenang dan modern.
                 </p>
-                <div class="pt-10">
-                    <div class="font-mono text-[8px] uppercase tracking-widest opacity-20">©2026 KALA SEDUH EXPERIMENTAL. ALL DATA IS DEMO.</div>
-                </div>
+              </div>
             </div>
+
+            <div class="flex gap-4">
+              <div
+                class="w-12 h-12 rounded-2xl bg-urbanGreen/20 border border-urbanGreen/20 flex items-center justify-center">
+                ✓
+              </div>
+
+              <div>
+                <h3 class="font-bold text-lg">
+                  Specialty Coffee
+                </h3>
+                <p class="text-gray-400 mt-1">
+                  Menggunakan biji kopi premium pilihan terbaik.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <div
+                class="w-12 h-12 rounded-2xl bg-urbanGreen/20 border border-urbanGreen/20 flex items-center justify-center">
+                ✓
+              </div>
+
+              <div>
+                <h3 class="font-bold text-lg">
+                  Industrial Interior
+                </h3>
+                <p class="text-gray-400 mt-1">
+                  Desain clean industrial dengan nuansa urban modern.
+                </p>
+              </div>
+            </div>
+
+          </div>
+
         </div>
-    </section>
 
-    <!-- Scripts -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Preloader animation
-            setTimeout(() => {
-                document.getElementById('preloader').style.transform = 'translateY(-100%)';
-            }, 1200);
+      </div>
 
-            // Staggered reveal trigger
-            setTimeout(() => {
-                document.querySelectorAll('.reveal-item').forEach(item => {
-                    item.classList.add('active');
-                });
-            }, 1500);
+    </div>
 
-            // AOS Initialization
-            AOS.init({
-                duration: 1000,
-                once: false,
-                mirror: true
-            });
+  </section>
 
-            // Smooth Scroll Fix
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-        });
+  <!-- CONTACT -->
+  <section id="contact" class="py-32 bg-urbanBlack">
 
-        // Parallax-ish Effect for Glitch Text on Scroll
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            document.querySelectorAll('.text-outline').forEach(el => {
-                el.style.transform = `translateX(${scrolled * 0.05}px)`;
-            });
-        });
-    </script>
+    <div class="max-w-7xl mx-auto px-6">
+
+      <div
+        class="bg-urbanDark rounded-[40px] border border-white/5 p-10 lg:p-16">
+
+        <div class="grid lg:grid-cols-2 gap-16">
+
+          <div class="reveal">
+
+            <span
+              class="text-urbanGreen text-sm font-semibold tracking-widest uppercase">
+              Contact
+            </span>
+
+            <h2
+              class="text-4xl md:text-5xl font-extrabold mt-5">
+              Let’s Talk
+              Over Coffee
+            </h2>
+
+            <p class="text-gray-400 mt-8 leading-relaxed">
+              Kunjungi Urban Roast dan nikmati pengalaman ngopi modern dengan suasana hangat dan nyaman.
+            </p>
+
+            <div class="space-y-6 mt-10">
+
+              <div>
+                <p class="text-gray-500 text-sm">Location</p>
+                <h3 class="text-lg font-semibold mt-1">
+                  Jakarta, Indonesia
+                </h3>
+              </div>
+
+              <div>
+                <p class="text-gray-500 text-sm">Phone</p>
+                <h3 class="text-lg font-semibold mt-1">
+                  +62 812 3456 7890
+                </h3>
+              </div>
+
+              <div>
+                <p class="text-gray-500 text-sm">Open Hours</p>
+                <h3 class="text-lg font-semibold mt-1">
+                  Everyday • 09.00 — 23.00
+                </h3>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="reveal">
+
+            <form class="space-y-6">
+
+              <div>
+                <label class="text-sm text-gray-400">
+                  Full Name
+                </label>
+
+                <input
+                  type="text"
+                  class="w-full mt-2 bg-urbanGray border border-white/5 rounded-2xl px-5 py-4 outline-none focus:border-urbanGreen transition"
+                  placeholder="Your name"
+                >
+              </div>
+
+              <div>
+                <label class="text-sm text-gray-400">
+                  Email Address
+                </label>
+
+                <input
+                  type="email"
+                  class="w-full mt-2 bg-urbanGray border border-white/5 rounded-2xl px-5 py-4 outline-none focus:border-urbanGreen transition"
+                  placeholder="your@email.com"
+                >
+              </div>
+
+              <div>
+                <label class="text-sm text-gray-400">
+                  Message
+                </label>
+
+                <textarea
+                  rows="5"
+                  class="w-full mt-2 bg-urbanGray border border-white/5 rounded-2xl px-5 py-4 outline-none focus:border-urbanGreen transition"
+                  placeholder="Write your message..."
+                ></textarea>
+              </div>
+
+              <button
+                class="w-full bg-urbanGreen hover:bg-urbanGreenLight transition py-4 rounded-2xl font-semibold">
+                Send Message
+              </button>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-black border-t border-white/5">
+
+    <div
+      class="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
+
+      <div>
+
+        <h2 class="text-2xl font-extrabold">
+          URBAN<span class="text-urbanGreen">ROAST</span>
+        </h2>
+
+        <p class="text-gray-500 mt-2 text-sm">
+          Crafted for modern coffee lovers.
+        </p>
+
+      </div>
+
+      <div class="flex gap-6 text-gray-400 text-sm">
+
+        <a href="#" class="hover:text-urbanGreen transition">
+          Instagram
+        </a>
+
+        <a href="#" class="hover:text-urbanGreen transition">
+          TikTok
+        </a>
+
+        <a href="#" class="hover:text-urbanGreen transition">
+          Spotify
+        </a>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+  <!-- SCROLL ANIMATION -->
+  <script>
+    const reveals = document.querySelectorAll('.reveal')
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('active')
+        }
+      })
+    }, {
+      threshold: 0.1
+    })
+
+    reveals.forEach(el => observer.observe(el))
+  </script>
+
 </body>
 </html>
